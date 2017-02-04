@@ -1,0 +1,313 @@
+/* 
+	
+The MIT License (MIT)
+
+Copyright (c) 2014 etienne-martin
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+*/
+
+"use strict";
+
+var dialog = {
+	defaultParams: {
+		title: "",
+		message: "",
+		button: "Ok",
+		cancel: "Cancel",
+		required: false,
+		input: {
+			type: "text"
+		},
+		validate: function(value){},
+		callback: function(value){}	
+	},
+	transitionEnd: "transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd",
+	alert: function(params) {
+		
+		dialog.appendDialogHolder();
+		
+		var params = $.extend(true, {}, dialog.defaultParams, params);
+		var alertId = dialog.generateRandomId();
+		
+		var newAlert  = '<div class="dialog-alert" id="'+alertId+'">';
+			newAlert 	+= '<div class="dialog-border"></div>';
+			newAlert 	+= '<div class="dialog-title">' + params.title + '</div>';
+			newAlert 	+= '<div class="dialog-message">' + params.message + '</div>';
+			newAlert 	+= '<div class="dialog-close">&times;</div>';
+			newAlert 	+= '<div class="dialog-confirm">' + params.button + '</div>';
+			newAlert 	+= '<div class="dialog-clearFloat"></div>';
+			newAlert += '</div>';
+		
+		dialog.holder.find("td").append(newAlert);
+		
+		var alert = $("#" + alertId);
+		var confirm = alert.find(".dialog-confirm");
+		var close = alert.find(".dialog-close");
+
+		dialog.injectDialog();
+
+		confirm.one("click.dialog", function() {
+			params.callback(true);
+		});
+		close.one("click.dialog", function() {
+			params.callback(null);
+		});
+	},
+	prompt: function(params) {
+		
+		dialog.appendDialogHolder();
+		
+		var params = $.extend(true, {}, dialog.defaultParams, params);
+		var alertId = dialog.generateRandomId();
+		
+		var inputAttributes = "";
+		for( var attribute in params.input ){
+			inputAttributes += ' '+attribute+'="'+params.input[attribute]+'" ';
+		}
+		
+		var newAlert  = '<div class="dialog-alert" id="'+alertId+'">';
+			newAlert 	+= '<div class="dialog-border"></div>';
+			newAlert 	+= '<div class="dialog-title">' + params.title + '</div>';
+			newAlert 	+= '<div class="dialog-message">' + params.message + '</div>';
+			newAlert 	+= '<label><input '+inputAttributes+' /></label>';
+			newAlert 	+= '<div class="dialog-close">&times;</div>';
+			newAlert 	+= '<div class="dialog-confirm">' + params.button + '</div>';
+			newAlert 	+= '<div class="dialog-clearFloat"></div>';
+			newAlert += '</div>';
+		
+		dialog.holder.find("td").append(newAlert);
+		
+		var alert = $("#" + alertId);
+		var confirm = alert.find(".dialog-confirm");
+		var close = alert.find(".dialog-close");
+		var input = alert.find("input");
+
+		dialog.injectDialog();
+		
+		if( params.required === true ){
+			close.remove();
+		}
+
+		confirm.bind("click.dialog", function() {
+
+			var value = input.val();
+			var isValid = params.validate(value) === false ? false : true;
+			
+			if( params.required === true && value === "" ){
+				isValid = false;
+			}
+			
+			if ( !isValid ) {
+				alert.one("webkitAnimationEnd oanimationend msAnimationEnd animationend", function(e){
+			    	alert.removeClass("shaking");
+			    }).addClass("shaking");
+				
+				return false;
+			}
+			params.callback(value);
+		});
+		close.one("click.dialog", function() {
+			params.callback(null);
+		});
+	},
+	confirm: function(params) {
+		
+		dialog.appendDialogHolder();
+		
+		var params = $.extend(true, {}, dialog.defaultParams, params);
+		var alertId = dialog.generateRandomId();
+		
+		var newAlert  = '<div class="dialog-alert" id="'+alertId+'">';
+			newAlert 	+= '<div class="dialog-border"></div>';
+			newAlert 	+= '<div class="dialog-title">' + params.title + '</div>';
+			newAlert 	+= '<div class="dialog-message">' + params.message + '</div>';
+			newAlert 	+= '<div class="dialog-close">&times;</div>';
+			newAlert 	+= '<div class="dialog-cancel">' + params.cancel + '</div>';
+			newAlert 	+= '<div class="dialog-confirm">' + params.button + '</div>';
+			newAlert 	+= '<div class="dialog-clearFloat"></div>';
+			newAlert += '</div>';
+		
+		dialog.holder.find("td").append(newAlert);
+		
+		var alert = $("#" + alertId);
+		var confirm = alert.find(".dialog-confirm");
+		var cancel = alert.find(".dialog-cancel");
+		var close = alert.find(".dialog-close");
+
+		dialog.injectDialog();
+
+		confirm.one("click.dialog", function() {
+			params.callback(true);
+		});
+		cancel.one("click.dialog", function() {
+			params.callback(false);
+		});
+		close.one("click.dialog", function() {
+			params.callback(null);
+		});
+	},
+	generateRandomId: function(){
+		return ( Math.floor(Math.random() * 1000000) + 1 ) + new Date().getTime();
+	},
+	showDialog: function(){
+		
+		$(":focus").blur();
+		
+		dialog.holder.css("top", $(window).scrollTop());
+		$(window).trigger("resize.dialog");
+
+		$(".dialog-alert").hide();
+		
+		var firstAlert = $(".dialog-alert:first");
+		
+		firstAlert.show();
+		
+		setTimeout(function(){
+			firstAlert.bind(dialog.transitionEnd, function(e){
+				
+				// Make sure that the event was fired for the alert and not its content.
+				if( !$(e.target).is(this) ){ return; }
+				firstAlert.unbind(dialog.transitionEnd);
+				
+		    	dialog.focusElement(firstAlert.find("input")[0], true);
+			}).addClass("visible");
+		}, 1);
+		
+	},
+	injectDialog: function(){
+		if ($(".dialog-alert:visible").length === 0) {
+			dialog.showDialog();
+		} else {
+			$(".dialog-alert:last").hide();
+		}
+		dialog.overlay.addClass("visible");
+	},
+	focusElement: function(elem, moveCursorToEnd){
+		
+		if( !elem ){ return; }
+		
+		$(elem).one("blur.dialog", function(){
+			dialog.focusElement(elem, false);
+		})
+		
+		// Focus the input
+		elem.focus();
+		
+		if( moveCursorToEnd ){
+			// Move the cursor to the end
+			if( elem.selectionStart !== undefined ){
+	            elem.setSelectionRange(elem.value.length, elem.value.length);
+	        }
+	        // Scroll to the very right of the input
+	        elem.scrollLeft = elem.scrollWidth;
+        }
+	},
+	appendDialogHolder: function(){
+		
+		if( dialog.holder ){ return; }
+		
+		$("body").append('<div id="dialog-overlay"></div><div id="dialog-holder"><table id="dialog-center"><tr><td></td></tr></table></div>');
+		dialog.overlay = $("#dialog-overlay");
+		dialog.holder = $("#dialog-holder");
+		
+		dialog.bindDialogGlobalEvents();
+	},
+	removeDialogHolder: function(){
+		
+		dialog.unbindDialogGlobalEvents();
+		
+		dialog.overlay.remove();
+		dialog.holder.remove();
+		
+		dialog.overlay = undefined;
+		dialog.holder = undefined;
+		
+	},
+	close: function(){
+		var alert = $(".dialog-alert:not(.closing):first");
+		
+		alert.addClass("closing").bind(dialog.transitionEnd, function(e){
+			
+			// Make sure that the event was fired for the alert and not its content.
+			if( !$(e.target).is(this) ){ return; }
+			alert.unbind(dialog.transitionEnd);
+			
+	    	alert.remove();
+	    	
+	    	if ($(".dialog-alert").length === 0) {
+			    dialog.overlay.addClass("closing").bind(dialog.transitionEnd, function(e){
+				    
+				    // Make sure that the event was fired for the alert and not its content.
+					if( !$(e.target).is(this) ){ return; }
+					dialog.overlay.unbind(dialog.transitionEnd);
+				    
+			    	dialog.removeDialogHolder();
+				}).removeClass("visible");
+			}else{
+				dialog.showDialog();
+			}
+		}).removeClass("visible");	
+	},
+	bindDialogGlobalEvents: function(){
+		
+		dialog.holder.add(dialog.overlay).bind("click.dialog", function(e){
+			if( !$(e.target).closest(".dialog-alert").is(".dialog-alert") ){
+				$(".dialog-close:visible").trigger("click");
+			}
+		});
+		
+		$(document).on("click.dialog", ".dialog-confirm, .dialog-cancel, .dialog-close", function(event) {
+			dialog.close();
+			return false;
+		});
+		
+		$(document).bind("keyup.dialog", function(e) {
+			if (e.keyCode == 27 && $(".dialog-alert").is(":visible")) { // Esc key
+				$(".dialog-close:visible").trigger("click");
+			}
+		});
+		
+		$(document).bind("keydown.dialog", function(event) {
+			
+			var alert = $(".dialog-alert:visible");
+			
+			if( alert.length === 0 ){
+				return;
+			}
+			
+			if (event.keyCode == 13) { // Enter key
+				alert.find(".dialog-confirm").trigger("click");
+				return false;
+			}
+		});
+	
+		$(window).bind("resize.dialog",function() {
+			dialog.overlay.height("100%");
+			dialog.overlay.height($(document).height());
+		});
+	},
+	unbindDialogGlobalEvents: function(){
+		dialog.overlay.off(".dialog");
+		dialog.holder.off(".dialog");
+		$(document).off(".dialog");
+		$(window).off(".dialog");
+	}
+};

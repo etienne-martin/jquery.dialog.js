@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+<meta name="viewport" content="initial-scale = 1.0,minimum-scale = 1.0">
+<title>jquery.dialog.js</title>	
+<link rel="stylesheet" href="build/jquery.dialog.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="build/jquery.dialog.min.js"></script>
+</head>
+<body>
+
+<a id="alert" href="#">Alert</a>
+<br><br>
+<a id="prompt" href="#">Prompt</a>
+<br><br>
+<a id="confirm" href="#">Confirm</a>
+
+<script>
+	
+	$("#alert").click(function(){
+		dialog.alert({
+			title: "Alert example",
+			message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce consectetur lacus at gravida luctus. Duis vitae magna tellus. In risus lorem, mollis vel nisi vitae, suscipit aliquet tortor.",
+			button: "Ok",
+			callback: function(value){
+				console.log(value);
+			}
+		});
+	});
+	
+	$("#prompt").click(function(){
+		dialog.prompt({
+			title: "Prompt example",
+			message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce consectetur lacus at gravida luctus. Duis vitae magna tellus. In risus lorem, mollis vel nisi vitae, suscipit aliquet tortor.",
+			button: "Send",
+			required: true,
+			input: {
+				type: "password",
+				placeholder: "This is a placeholder..."
+			},
+			validate: function(value){
+				if( $.trim(value) === "" ){
+					return false;
+				}
+			},
+			callback: function(value){
+				console.log(value);
+			}
+		});
+	});
+	
+	$("#confirm").click(function(){
+		dialog.confirm({
+			title: "Confirm example",
+			message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce consectetur lacus at gravida luctus. Duis vitae magna tellus. In risus lorem, mollis vel nisi vitae, suscipit aliquet tortor.",
+			cancel: "Cancel",
+			button: "Accept",
+			callback: function(value){
+				console.log(value);
+			}
+		});
+	});
+	
+</script>
+
+</body>
+</html>
