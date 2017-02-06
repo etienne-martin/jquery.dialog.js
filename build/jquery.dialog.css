@@ -2,7 +2,7 @@
 	
 The MIT License (MIT)
 
-Copyright (c) 2014 etienne-martin
+Copyright (c) 2017 Etienne Martin
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -41,11 +41,11 @@ SOFTWARE.
 	transform: translateZ(0);
 }
 
-#dialog-overlay.closing {
+#dialog-overlay.dialog-closing {
 	transition: opacity 0.25s;
 }
 
-#dialog-overlay.visible {
+#dialog-overlay.dialog-visible {
 	opacity: 1;
 }
 
@@ -61,6 +61,11 @@ SOFTWARE.
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	transform: translateZ(0);
+}
+
+#dialog-holder.dialog-fixed {
+	position: fixed;
+	overflow: auto;
 }
 
 #dialog-holder #dialog-center {
@@ -94,9 +99,7 @@ SOFTWARE.
 	border-radius: 4px;
 	box-shadow: rgba(0, 0, 0, 0.1) 0 2px 3px, rgba(0, 0, 0, 0.2) 0 5px 15px;
 	opacity: 0;
-	-ms-transform: scale(0.8);
-	transform: scale(0.8);
-	transition: transform 0.5s, opacity 0.5s;
+	transition: transform 0.5s, opacity 0.45s;
 	font-size: 14px;
 	color: #666;
 }
@@ -116,17 +119,27 @@ SOFTWARE.
 	}
 }
 
-#dialog-holder #dialog-center td .dialog-alert.closing {
-	transition: transform 0.25s, opacity 0.25s;
+#dialog-holder #dialog-center td .dialog-alert[data-dialog-animation=scale] {
+	-ms-transform: scale(0.8);
+	transform: scale(0.8);
 }
 
-#dialog-holder #dialog-center td .dialog-alert.visible {
+#dialog-holder #dialog-center td .dialog-alert[data-dialog-animation=slide] {
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+#dialog-holder #dialog-center td .dialog-alert.dialog-closing {
+	transition: transform 0.25s, opacity 0.2s;
+}
+
+#dialog-holder #dialog-center td .dialog-alert.dialog-visible {
 	-ms-transform: scale(1);
 	transform: scale(1);
 	opacity: 1;
 }
 
-#dialog-holder #dialog-center td .dialog-alert.shaking {
+#dialog-holder #dialog-center td .dialog-alert.dialog-shaking {
 	animation: shake 0.5s linear;
 }
 

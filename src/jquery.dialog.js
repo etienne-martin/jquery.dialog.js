@@ -33,6 +33,8 @@ var dialog = {
 		button: "Ok",
 		cancel: "Cancel",
 		required: false,
+		position: "fixed",
+		animation: "scale",
 		input: {
 			type: "text"
 		},
@@ -61,6 +63,13 @@ var dialog = {
 		var alert = $("#" + alertId);
 		var confirm = alert.find(".dialog-confirm");
 		var close = alert.find(".dialog-close");
+		
+		if( params.required === true ){
+			close.remove();
+		}
+		
+		alert.attr("data-dialog-position", params.position);
+		alert.attr("data-dialog-animation", params.animation);
 
 		dialog.injectDialog();
 
@@ -99,12 +108,15 @@ var dialog = {
 		var confirm = alert.find(".dialog-confirm");
 		var close = alert.find(".dialog-close");
 		var input = alert.find("input");
-
-		dialog.injectDialog();
 		
 		if( params.required === true ){
 			close.remove();
 		}
+		
+		alert.attr("data-dialog-position", params.position);
+		alert.attr("data-dialog-animation", params.animation);
+
+		dialog.injectDialog();
 
 		confirm.bind("click.dialog", function() {
 
@@ -117,8 +129,8 @@ var dialog = {
 			
 			if ( !isValid ) {
 				alert.one("webkitAnimationEnd oanimationend msAnimationEnd animationend", function(e){
-			    	alert.removeClass("shaking");
-			    }).addClass("shaking");
+			    	alert.removeClass("dialog-shaking");
+			    }).addClass("dialog-shaking");
 				
 				return false;
 			}
@@ -151,6 +163,13 @@ var dialog = {
 		var confirm = alert.find(".dialog-confirm");
 		var cancel = alert.find(".dialog-cancel");
 		var close = alert.find(".dialog-close");
+		
+		if( params.required === true ){
+			close.remove();
+		}
+		
+		alert.attr("data-dialog-position", params.position);
+		alert.attr("data-dialog-animation", params.animation);
 
 		dialog.injectDialog();
 
@@ -171,12 +190,19 @@ var dialog = {
 		
 		$(":focus").blur();
 		
-		dialog.holder.css("top", $(window).scrollTop());
+		var firstAlert = $(".dialog-alert:first");
+		
+		if( firstAlert.attr("data-dialog-position") === "absolute" ){
+			dialog.holder.removeClass("dialog-fixed");
+			dialog.holder.css("top", $(window).scrollTop());
+		}else{
+			dialog.holder.addClass("dialog-fixed");
+			dialog.holder.css("top", "");
+		}
+		
 		$(window).trigger("resize.dialog");
 
 		$(".dialog-alert").hide();
-		
-		var firstAlert = $(".dialog-alert:first");
 		
 		firstAlert.show();
 		
@@ -188,7 +214,7 @@ var dialog = {
 				firstAlert.unbind(dialog.transitionEnd);
 				
 		    	dialog.focusElement(firstAlert.find("input")[0], true);
-			}).addClass("visible");
+			}).addClass("dialog-visible");
 		}, 1);
 		
 	},
@@ -198,7 +224,7 @@ var dialog = {
 		} else {
 			$(".dialog-alert:last").hide();
 		}
-		dialog.overlay.addClass("visible");
+		dialog.overlay.addClass("dialog-visible");
 	},
 	focusElement: function(elem, moveCursorToEnd){
 		
@@ -242,9 +268,9 @@ var dialog = {
 		
 	},
 	close: function(){
-		var alert = $(".dialog-alert:not(.closing):first");
+		var alert = $(".dialog-alert:not(.dialog-closing):first");
 		
-		alert.addClass("closing").bind(dialog.transitionEnd, function(e){
+		alert.addClass("dialog-closing").bind(dialog.transitionEnd, function(e){
 			
 			// Make sure that the event was fired for the alert and not its content.
 			if( !$(e.target).is(this) ){ return; }
@@ -253,18 +279,18 @@ var dialog = {
 	    	alert.remove();
 	    	
 	    	if ($(".dialog-alert").length === 0) {
-			    dialog.overlay.addClass("closing").bind(dialog.transitionEnd, function(e){
+			    dialog.overlay.addClass("dialog-closing").bind(dialog.transitionEnd, function(e){
 				    
 				    // Make sure that the event was fired for the alert and not its content.
 					if( !$(e.target).is(this) ){ return; }
 					dialog.overlay.unbind(dialog.transitionEnd);
 				    
 			    	dialog.removeDialogHolder();
-				}).removeClass("visible");
+				}).removeClass("dialog-visible");
 			}else{
 				dialog.showDialog();
 			}
-		}).removeClass("visible");	
+		}).removeClass("dialog-visible");	
 	},
 	bindDialogGlobalEvents: function(){
 		

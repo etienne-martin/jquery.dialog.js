@@ -17,6 +17,8 @@
 <br><br>
 <a id="confirm" href="#">Confirm</a>
 
+<div id="scroller" style="height: 9999px;"></div>
+
 <script>
 	
 	$("#alert").click(function(){
@@ -24,10 +26,12 @@
 			title: "Alert example",
 			message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce consectetur lacus at gravida luctus. Duis vitae magna tellus. In risus lorem, mollis vel nisi vitae, suscipit aliquet tortor.",
 			button: "Ok",
+			animation: "fade",
 			callback: function(value){
 				console.log(value);
 			}
 		});
+		return false;
 	});
 	
 	$("#prompt").click(function(){
@@ -36,6 +40,8 @@
 			message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce consectetur lacus at gravida luctus. Duis vitae magna tellus. In risus lorem, mollis vel nisi vitae, suscipit aliquet tortor.",
 			button: "Send",
 			required: true,
+			position: "absolute",
+			animation: "slide",
 			input: {
 				type: "password",
 				placeholder: "This is a placeholder..."
@@ -49,6 +55,7 @@
 				console.log(value);
 			}
 		});
+		return false;
 	});
 	
 	$("#confirm").click(function(){
@@ -57,10 +64,12 @@
 			message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce consectetur lacus at gravida luctus. Duis vitae magna tellus. In risus lorem, mollis vel nisi vitae, suscipit aliquet tortor.",
 			cancel: "Cancel",
 			button: "Accept",
+			required: true,
 			callback: function(value){
 				console.log(value);
 			}
 		});
+		return false;
 	});
 	
 </script>

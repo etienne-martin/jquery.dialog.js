@@ -24,11 +24,10 @@ $primaryColor: #007eff;
 	// GPU acceleration 
 	transform: translateZ(0);
 	
-	&.closing{
+	&.dialog-closing{
 	    transition: opacity 0.25s;
 	}
-	
-	&.visible{
+	&.dialog-visible{
 		opacity: 1;		
 	}
 }
@@ -45,6 +44,11 @@ $primaryColor: #007eff;
 	
 	// GPU acceleration 
 	transform: translateZ(0);
+	
+	&.dialog-fixed{
+		position: fixed;
+		overflow: auto;
+	}
 	
 	#dialog-center{
 		width: 100%;
@@ -75,8 +79,7 @@ $primaryColor: #007eff;
 				border-radius: 4px;
 				box-shadow: rgba(0, 0, 0, 0.1) 0 2px 3px, rgba(0, 0, 0, 0.20) 0 5px 15px;
 				opacity: 0;
-				transform:scale(0.8);
-			    transition: transform 0.5s, opacity 0.5s;
+			    transition: transform 0.5s, opacity 0.45s;
 				font-size: 14px;
 				color: #666;
 				
@@ -98,15 +101,22 @@ $primaryColor: #007eff;
 				    100% {
 					}
 				}
-			    
-			    &.closing{
-				    transition: transform 0.25s, opacity 0.25s;
+				
+				&[data-dialog-animation=scale]{
+					transform:scale(0.8);
 				}
-				&.visible{
+				&[data-dialog-animation=slide]{
+					transform: translateY(-50%);
+				}
+			    
+			    &.dialog-closing{
+				    transition: transform 0.25s, opacity 0.2s;
+				}
+				&.dialog-visible{
 				    transform:scale(1);
 				    opacity: 1;
 				}
-				&.shaking{
+				&.dialog-shaking{
 				    animation: shake 0.5s linear;
 				}
 			    
