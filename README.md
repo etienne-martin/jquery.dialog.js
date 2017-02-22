@@ -1,4 +1,4 @@
-# jQuery.dialog.js
+# jquery.dialog.js
 
 This plugin is a lightweight replacement for the browser's ~~boring~~ default dialog boxes.
 
