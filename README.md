@@ -2,6 +2,10 @@
 
 This plugin is a lightweight replacement for the browser's ~~boring~~ default dialog boxes.
 
+![Alert dialog](https://github.com/etienne-martin/jquery.dialog.js/raw/master/alert.png "Alert dialog")
+![Prompt dialog](https://github.com/etienne-martin/jquery.dialog.js/raw/master/prompt.png "Prompt dialog")
+![Confirm dialog](https://github.com/etienne-martin/jquery.dialog.js/raw/master/confirm.png "Confirm dialog")
+
 ## Getting Started
 
 Embed [jquery.dialog.css](https://github.com/etienne-martin/dialog/blob/master/build/jquery.dialog.css) and [jquery.dialog.js](https://github.com/etienne-martin/dialog/blob/master/build/jquery.dialog.js) in your page.  
