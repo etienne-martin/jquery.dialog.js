@@ -90,7 +90,7 @@ The label of the cancellation button.
 Default: ```false```  
 Affects: alert, prompt & confirm</sup>  
 Whether or not the user should interact with the dialog box.  
-Prevents the user from closing the dialog without entering any value
+Prevents the user from closing the dialog without entering any value.
 
 #### position
 <sup>Type: String  
