@@ -211,7 +211,7 @@ dialog.prompt({
 
 ### close
 
-Manually close the currently visible dialog box.
+Programmatically close the currently visible dialog box.
 
 ```javascript
 dialog.close();
