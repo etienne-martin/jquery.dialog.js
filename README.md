@@ -176,8 +176,8 @@ dialog.prompt({
 <sup>Type: Function  
 Default: ```function(value){}```  
 Affects: prompt</sup>  
-Function used to validate the submitted value. This function should return ```true``` or ```false```.  
-Prevents the dialog from closing if the submitted value is invalid.
+Function used to validate the submitted value. The passed function should return ```true``` or ```false```.  
+Prevents the dialog box from closing if the submitted value is invalid.
 
 ```javascript
 dialog.prompt({
@@ -195,7 +195,8 @@ dialog.prompt({
 <sup>Type: Function  
 Default: ```function(value){}```  
 Affects: alert, prompt & confirm</sup>  
-The function to be executed when the user closes/submits the dialog box.
+The function to be executed when the user closes/submits the dialog box.  
+Returns ```null``` if the user closes the dialog box.
 
 ```javascript
 dialog.prompt({
