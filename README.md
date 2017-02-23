@@ -21,7 +21,7 @@ Here's some basic examples on how to use the plugin:
 
 ### Alert
 
-Replaces the default browser ```alert()``` function.
+Replaces the default ```alert()``` function.
 
 ```javascript
 dialog.alert({
@@ -31,7 +31,7 @@ dialog.alert({
 
 ### Prompt
 
-Replaces the default browser ```prompt()``` function.
+Replaces the default ```prompt()``` function.
 
 ```javascript
 dialog.prompt({
@@ -44,7 +44,7 @@ dialog.prompt({
 
 ### Confirm
 
-Replaces the default browser ```confirm()``` function.
+Replaces the default ```confirm()``` function.
 
 ```javascript
 dialog.confirm({
