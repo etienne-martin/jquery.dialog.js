@@ -207,6 +207,16 @@ dialog.prompt({
 });
 ```
 
+## Methods
+
+### close
+
+Manually close the currently visible dialog box.
+
+```javascript
+dialog.close();
+```
+
 ## Built With
 
 * [Grunt](https://gruntjs.com/) - The JavaScript Task Runner
