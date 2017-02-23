@@ -1,6 +1,6 @@
 # jquery.dialog.js
 
-This plugin is a lightweight replacement for the browser's ~~boring~~ default dialog boxes.
+A lightweight replacement for the browser's ~~boring~~ default dialog boxes.
 
 ![Alert dialog](https://github.com/etienne-martin/jquery.dialog.js/raw/master/alert.png "Alert dialog")
 ![Prompt dialog](https://github.com/etienne-martin/jquery.dialog.js/raw/master/prompt.png "Prompt dialog")
@@ -61,50 +61,99 @@ dialog.confirm({
 
 ## Options
 
-#### title
+### title
 <sup>Type: String  
 Default: ```""```  
 Affects: alert, prompt & confirm</sup>   
 The title of the dialog.
 
-#### message 
+```javascript
+dialog.alert({
+	title: "This is a title",
+	message: ...
+});
+```
+
+### message 
 <sup>Type: String  
 Default: ```""```  
 Affects: alert, prompt & confirm</sup>  
 The body of the dialog.
 
-#### button
+```javascript
+dialog.alert({
+	message: "This is a message"
+});
+```
+
+### button
 <sup>Type: String  
 Default: ```"Ok"```  
 Affects: alert, prompt & confirm</sup>  
 The label of the confirmation button.
 
-#### cancel
+```javascript
+dialog.alert({
+	message: ...,
+	button: "This is a button"
+});
+```
+
+### cancel
 <sup>Type: String  
 Default: ```"Cancel"```  
 Affects: confirm</sup>  
 The label of the cancellation button.
 
-#### required
+```javascript
+dialog.confirm({
+	message: ...,
+	cancel: "This is a cancel button",
+	callback: ...
+});
+```
+
+### required
 <sup>Type: Boolean  
 Default: ```false```  
 Affects: alert, prompt & confirm</sup>  
 Whether or not the user should interact with the dialog box.  
 Prevents the user from closing the dialog without entering any value.
 
-#### position
+```javascript
+dialog.confirm({
+	message: ...,
+	required: true
+});
+```
+
+### position
 <sup>Type: String  
 Default: ```"fixed"```  
 Affects: alert, prompt & confirm</sup>  
 Changes the css positioning of the dialog box. Can be either ```fixed``` or ```absolute```.
 
-#### animation
+```javascript
+dialog.alert({
+	message: ...,
+	position: "absolute"
+});
+```
+
+### animation
 <sup>Type: String  
 Default: ```"scale"```  
 Affects: alert, prompt & confirm</sup>  
 The animation used to animate the dialog box. Can be either ```scale```, ```fade``` or ```slide```.
 
-#### input
+```javascript
+dialog.alert({
+	message: ...,
+	animation: "slide"
+});
+```
+
+### input
 <sup>Type: Object  
 Default: ```{
 			type: "text"
@@ -112,18 +161,50 @@ Default: ```{
 Affects: prompt</sup>  
 List of attributes to apply to the prompt input.
 
-#### validate
+```javascript
+dialog.prompt({
+	message: ...,
+	input: {
+		type: "password",
+		placeholder: "This is a placeholder..."
+	},
+	callback: ...
+});
+```
+
+### validate
 <sup>Type: Function  
 Default: ```function(value){}```  
 Affects: prompt</sup>  
 Function used to validate the submitted value. This function should return ```true``` or ```false```.  
 Prevents the dialog from closing if the submitted value is invalid.
 
-#### callback
+```javascript
+dialog.prompt({
+	message: ...,
+	validate: function(value){
+		if( $.trim(value) === "" ){
+			return false;
+		}
+	},
+	callback: ...
+});
+```
+
+### callback
 <sup>Type: Function  
-Default: ```function(){}```  
+Default: ```function(value){}```  
 Affects: alert, prompt & confirm</sup>  
 The function to be executed when the user closes/submits the dialog box.
+
+```javascript
+dialog.prompt({
+	message: ...,
+	callback: function(value){
+		console.log(value);
+	}
+});
+```
 
 ## Built With
 
