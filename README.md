@@ -124,7 +124,7 @@ Prevents the user from closing the dialog without entering any value.
 dialog.confirm({
 	message: ...,
 	required: true,
-    	callback: ...
+	callback: ...
 });
 ```
 
