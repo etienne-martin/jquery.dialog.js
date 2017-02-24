@@ -123,7 +123,8 @@ Prevents the user from closing the dialog without entering any value.
 ```javascript
 dialog.confirm({
 	message: ...,
-	required: true
+	required: true,
+    	callback: ...
 });
 ```
 
