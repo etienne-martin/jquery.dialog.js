@@ -197,7 +197,7 @@ dialog.prompt({
 Default: ```function(value){}```  
 Affects: alert, prompt & confirm</sup>  
 The function to be executed when the user closes/submits the dialog box.  
-Returns ```null``` if the user closes the dialog box.
+The returned value is ```null``` if the user closes the dialog box.
 
 ```javascript
 dialog.prompt({
