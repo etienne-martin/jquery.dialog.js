@@ -57,7 +57,7 @@ dialog.confirm({
 
 #### Try it yourself!
 
-[Download the project](https://github.com/etienne-martin/dialog/archive/master.zip) and open ```example.html``` in your favorite browser.
+[Download the project](https://github.com/etienne-martin/dialog/archive/master.zip) and open ```example.html``` in your favorite browser or check out the online demo on [codepen.io](http://codepen.io/etiennemartin/pen/mWVWEQ).
 
 ## Options
 
