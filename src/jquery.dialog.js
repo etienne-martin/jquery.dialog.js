@@ -1,313 +1,317 @@
 "use strict";
 
-var dialog = {
-	defaultParams: {
-		title: "",
-		message: "",
-		button: "Ok",
-		cancel: "Cancel",
-		required: false,
-		position: "fixed",
-		animation: "scale",
-		input: {
-			type: "text"
+(function($){
+	
+	window.dialog = {
+		defaultParams: {
+			title: "",
+			message: "",
+			button: "Ok",
+			cancel: "Cancel",
+			required: false,
+			position: "fixed",
+			animation: "scale",
+			input: {
+				type: "text"
+			},
+			validate: function(value){},
+			callback: function(value){}	
 		},
-		validate: function(value){},
-		callback: function(value){}	
-	},
-	transitionEnd: "transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd",
-	alert: function(params) {
-		
-		dialog.appendDialogHolder();
-		
-		var params = $.extend(true, {}, dialog.defaultParams, params);
-		var alertId = dialog.generateRandomId();
-		
-		var newAlert  = '<div class="dialog-alert" id="'+alertId+'">';
-			newAlert 	+= '<div class="dialog-border"></div>';
-			newAlert 	+= '<div class="dialog-title">' + params.title + '</div>';
-			newAlert 	+= '<div class="dialog-message">' + params.message + '</div>';
-			newAlert 	+= '<div class="dialog-close">&times;</div>';
-			newAlert 	+= '<div class="dialog-confirm">' + params.button + '</div>';
-			newAlert 	+= '<div class="dialog-clearFloat"></div>';
-			newAlert += '</div>';
-		
-		dialog.holder.find("td").append(newAlert);
-		
-		var alert = $("#" + alertId);
-		var confirm = alert.find(".dialog-confirm");
-		var close = alert.find(".dialog-close");
-		
-		if( params.required === true ){
-			close.remove();
-		}
-		
-		alert.attr("data-dialog-position", params.position);
-		alert.attr("data-dialog-animation", params.animation);
-
-		dialog.injectDialog();
-
-		confirm.one("click.dialog", function() {
-			params.callback(true);
-		});
-		close.one("click.dialog", function() {
-			params.callback(null);
-		});
-	},
-	prompt: function(params) {
-		
-		dialog.appendDialogHolder();
-		
-		var params = $.extend(true, {}, dialog.defaultParams, params);
-		var alertId = dialog.generateRandomId();
-		
-		var inputAttributes = "";
-		for( var attribute in params.input ){
-			inputAttributes += ' '+attribute+'="'+params.input[attribute]+'" ';
-		}
-		
-		var newAlert  = '<div class="dialog-alert" id="'+alertId+'">';
-			newAlert 	+= '<div class="dialog-border"></div>';
-			newAlert 	+= '<div class="dialog-title">' + params.title + '</div>';
-			newAlert 	+= '<div class="dialog-message">' + params.message + '</div>';
-			newAlert 	+= '<label><input '+inputAttributes+' /></label>';
-			newAlert 	+= '<div class="dialog-close">&times;</div>';
-			newAlert 	+= '<div class="dialog-confirm">' + params.button + '</div>';
-			newAlert 	+= '<div class="dialog-clearFloat"></div>';
-			newAlert += '</div>';
-		
-		dialog.holder.find("td").append(newAlert);
-		
-		var alert = $("#" + alertId);
-		var confirm = alert.find(".dialog-confirm");
-		var close = alert.find(".dialog-close");
-		var input = alert.find("input");
-		
-		if( params.required === true ){
-			close.remove();
-		}
-		
-		alert.attr("data-dialog-position", params.position);
-		alert.attr("data-dialog-animation", params.animation);
-
-		dialog.injectDialog();
-
-		confirm.bind("click.dialog", function() {
-
-			var value = input.val();
-			var isValid = params.validate(value) === false ? false : true;
+		transitionEnd: "transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd",
+		alert: function(params) {
 			
-			if( params.required === true && value === "" ){
-				isValid = false;
+			dialog.appendDialogHolder();
+			
+			var params = $.extend(true, {}, dialog.defaultParams, params);
+			var alertId = dialog.generateRandomId();
+			
+			var newAlert  = '<div class="dialog-alert" id="'+alertId+'">';
+				newAlert 	+= '<div class="dialog-border"></div>';
+				newAlert 	+= '<div class="dialog-title">' + params.title + '</div>';
+				newAlert 	+= '<div class="dialog-message">' + params.message + '</div>';
+				newAlert 	+= '<div class="dialog-close">&times;</div>';
+				newAlert 	+= '<div class="dialog-confirm">' + params.button + '</div>';
+				newAlert 	+= '<div class="dialog-clearFloat"></div>';
+				newAlert += '</div>';
+			
+			dialog.holder.find("td").append(newAlert);
+			
+			var alert = $("#" + alertId);
+			var confirm = alert.find(".dialog-confirm");
+			var close = alert.find(".dialog-close");
+			
+			if( params.required === true ){
+				close.remove();
 			}
 			
-			if ( !isValid ) {
-				alert.one("webkitAnimationEnd oanimationend msAnimationEnd animationend", function(e){
-			    	alert.removeClass("dialog-shaking");
-			    }).addClass("dialog-shaking");
+			alert.attr("data-dialog-position", params.position);
+			alert.attr("data-dialog-animation", params.animation);
+	
+			dialog.injectDialog();
+	
+			confirm.one("click.dialog", function() {
+				params.callback(true);
+			});
+			close.one("click.dialog", function() {
+				params.callback(null);
+			});
+		},
+		prompt: function(params) {
+			
+			dialog.appendDialogHolder();
+			
+			var params = $.extend(true, {}, dialog.defaultParams, params);
+			var alertId = dialog.generateRandomId();
+			
+			var inputAttributes = "";
+			for( var attribute in params.input ){
+				inputAttributes += ' '+attribute+'="'+params.input[attribute]+'" ';
+			}
+			
+			var newAlert  = '<div class="dialog-alert" id="'+alertId+'">';
+				newAlert 	+= '<div class="dialog-border"></div>';
+				newAlert 	+= '<div class="dialog-title">' + params.title + '</div>';
+				newAlert 	+= '<div class="dialog-message">' + params.message + '</div>';
+				newAlert 	+= '<label><input '+inputAttributes+' /></label>';
+				newAlert 	+= '<div class="dialog-close">&times;</div>';
+				newAlert 	+= '<div class="dialog-confirm">' + params.button + '</div>';
+				newAlert 	+= '<div class="dialog-clearFloat"></div>';
+				newAlert += '</div>';
+			
+			dialog.holder.find("td").append(newAlert);
+			
+			var alert = $("#" + alertId);
+			var confirm = alert.find(".dialog-confirm");
+			var close = alert.find(".dialog-close");
+			var input = alert.find("input");
+			
+			if( params.required === true ){
+				close.remove();
+			}
+			
+			alert.attr("data-dialog-position", params.position);
+			alert.attr("data-dialog-animation", params.animation);
+	
+			dialog.injectDialog();
+	
+			confirm.bind("click.dialog", function() {
+	
+				var value = input.val();
+				var isValid = params.validate(value) === false ? false : true;
 				
-				return false;
+				if( params.required === true && value === "" ){
+					isValid = false;
+				}
+				
+				if ( !isValid ) {
+					alert.one("webkitAnimationEnd oanimationend msAnimationEnd animationend", function(e){
+				    	alert.removeClass("dialog-shaking");
+				    }).addClass("dialog-shaking");
+					
+					return false;
+				}
+				params.callback(value);
+			});
+			close.one("click.dialog", function() {
+				params.callback(null);
+			});
+		},
+		confirm: function(params) {
+			
+			dialog.appendDialogHolder();
+			
+			var params = $.extend(true, {}, dialog.defaultParams, params);
+			var alertId = dialog.generateRandomId();
+			
+			var newAlert  = '<div class="dialog-alert" id="'+alertId+'">';
+				newAlert 	+= '<div class="dialog-border"></div>';
+				newAlert 	+= '<div class="dialog-title">' + params.title + '</div>';
+				newAlert 	+= '<div class="dialog-message">' + params.message + '</div>';
+				newAlert 	+= '<div class="dialog-close">&times;</div>';
+				newAlert 	+= '<div class="dialog-cancel">' + params.cancel + '</div>';
+				newAlert 	+= '<div class="dialog-confirm">' + params.button + '</div>';
+				newAlert 	+= '<div class="dialog-clearFloat"></div>';
+				newAlert += '</div>';
+			
+			dialog.holder.find("td").append(newAlert);
+			
+			var alert = $("#" + alertId);
+			var confirm = alert.find(".dialog-confirm");
+			var cancel = alert.find(".dialog-cancel");
+			var close = alert.find(".dialog-close");
+			
+			if( params.required === true ){
+				close.remove();
 			}
-			params.callback(value);
-		});
-		close.one("click.dialog", function() {
-			params.callback(null);
-		});
-	},
-	confirm: function(params) {
-		
-		dialog.appendDialogHolder();
-		
-		var params = $.extend(true, {}, dialog.defaultParams, params);
-		var alertId = dialog.generateRandomId();
-		
-		var newAlert  = '<div class="dialog-alert" id="'+alertId+'">';
-			newAlert 	+= '<div class="dialog-border"></div>';
-			newAlert 	+= '<div class="dialog-title">' + params.title + '</div>';
-			newAlert 	+= '<div class="dialog-message">' + params.message + '</div>';
-			newAlert 	+= '<div class="dialog-close">&times;</div>';
-			newAlert 	+= '<div class="dialog-cancel">' + params.cancel + '</div>';
-			newAlert 	+= '<div class="dialog-confirm">' + params.button + '</div>';
-			newAlert 	+= '<div class="dialog-clearFloat"></div>';
-			newAlert += '</div>';
-		
-		dialog.holder.find("td").append(newAlert);
-		
-		var alert = $("#" + alertId);
-		var confirm = alert.find(".dialog-confirm");
-		var cancel = alert.find(".dialog-cancel");
-		var close = alert.find(".dialog-close");
-		
-		if( params.required === true ){
-			close.remove();
-		}
-		
-		alert.attr("data-dialog-position", params.position);
-		alert.attr("data-dialog-animation", params.animation);
-
-		dialog.injectDialog();
-
-		confirm.one("click.dialog", function() {
-			params.callback(true);
-		});
-		cancel.one("click.dialog", function() {
-			params.callback(false);
-		});
-		close.one("click.dialog", function() {
-			params.callback(null);
-		});
-	},
-	generateRandomId: function(){
-		return ( Math.floor(Math.random() * 1000000) + 1 ) + new Date().getTime();
-	},
-	showDialog: function(){
-		
-		$(":focus").blur();
-		
-		var firstAlert = $(".dialog-alert:first");
-		
-		if( firstAlert.attr("data-dialog-position") === "absolute" ){
-			dialog.holder.removeClass("dialog-fixed");
-			dialog.holder.css("top", $(window).scrollTop());
-		}else{
-			dialog.holder.addClass("dialog-fixed");
-			dialog.holder.css("top", "");
-		}
-		
-		$(window).trigger("resize.dialog");
-
-		$(".dialog-alert").hide();
-		
-		firstAlert.show();
-		
-		setTimeout(function(){
-			firstAlert.bind(dialog.transitionEnd, function(e){
+			
+			alert.attr("data-dialog-position", params.position);
+			alert.attr("data-dialog-animation", params.animation);
+	
+			dialog.injectDialog();
+	
+			confirm.one("click.dialog", function() {
+				params.callback(true);
+			});
+			cancel.one("click.dialog", function() {
+				params.callback(false);
+			});
+			close.one("click.dialog", function() {
+				params.callback(null);
+			});
+		},
+		generateRandomId: function(){
+			return ( Math.floor(Math.random() * 1000000) + 1 ) + new Date().getTime();
+		},
+		showDialog: function(){
+			
+			$(":focus").blur();
+			
+			var firstAlert = $(".dialog-alert:first");
+			
+			if( firstAlert.attr("data-dialog-position") === "absolute" ){
+				dialog.holder.removeClass("dialog-fixed");
+				dialog.holder.css("top", $(window).scrollTop());
+			}else{
+				dialog.holder.addClass("dialog-fixed");
+				dialog.holder.css("top", "");
+			}
+			
+			$(window).trigger("resize.dialog");
+	
+			$(".dialog-alert").hide();
+			
+			firstAlert.show();
+			
+			setTimeout(function(){
+				firstAlert.bind(dialog.transitionEnd, function(e){
+					
+					// Make sure that the event was fired for the alert and not its content.
+					if( !$(e.target).is(this) ){ return; }
+					firstAlert.unbind(dialog.transitionEnd);
+					
+			    	dialog.focusElement(firstAlert.find("input")[0], true);
+				}).addClass("dialog-visible");
+			}, 1);
+			
+		},
+		injectDialog: function(){
+			if ($(".dialog-alert:visible").length === 0) {
+				dialog.showDialog();
+			} else {
+				$(".dialog-alert:last").hide();
+			}
+			dialog.overlay.addClass("dialog-visible");
+		},
+		focusElement: function(elem, moveCursorToEnd){
+			
+			if( !elem ){ return; }
+			
+			$(elem).one("blur.dialog", function(){
+				dialog.focusElement(elem, false);
+			})
+			
+			// Focus the input
+			elem.focus();
+			
+			if( moveCursorToEnd ){
+				// Move the cursor to the end
+				if( elem.selectionStart !== undefined ){
+		            elem.setSelectionRange(elem.value.length, elem.value.length);
+		        }
+		        // Scroll to the very right of the input
+		        elem.scrollLeft = elem.scrollWidth;
+	        }
+		},
+		appendDialogHolder: function(){
+			
+			if( dialog.holder ){ return; }
+			
+			$("body").append('<div id="dialog-overlay"></div><div id="dialog-holder"><table id="dialog-center"><tr><td></td></tr></table></div>');
+			dialog.overlay = $("#dialog-overlay");
+			dialog.holder = $("#dialog-holder");
+			
+			dialog.bindDialogGlobalEvents();
+		},
+		removeDialogHolder: function(){
+			
+			dialog.unbindDialogGlobalEvents();
+			
+			dialog.overlay.remove();
+			dialog.holder.remove();
+			
+			dialog.overlay = undefined;
+			dialog.holder = undefined;
+			
+		},
+		close: function(){
+			var alert = $(".dialog-alert:not(.dialog-closing):first");
+			
+			alert.addClass("dialog-closing").bind(dialog.transitionEnd, function(e){
 				
 				// Make sure that the event was fired for the alert and not its content.
 				if( !$(e.target).is(this) ){ return; }
-				firstAlert.unbind(dialog.transitionEnd);
+				alert.unbind(dialog.transitionEnd);
 				
-		    	dialog.focusElement(firstAlert.find("input")[0], true);
-			}).addClass("dialog-visible");
-		}, 1);
-		
-	},
-	injectDialog: function(){
-		if ($(".dialog-alert:visible").length === 0) {
-			dialog.showDialog();
-		} else {
-			$(".dialog-alert:last").hide();
-		}
-		dialog.overlay.addClass("dialog-visible");
-	},
-	focusElement: function(elem, moveCursorToEnd){
-		
-		if( !elem ){ return; }
-		
-		$(elem).one("blur.dialog", function(){
-			dialog.focusElement(elem, false);
-		})
-		
-		// Focus the input
-		elem.focus();
-		
-		if( moveCursorToEnd ){
-			// Move the cursor to the end
-			if( elem.selectionStart !== undefined ){
-	            elem.setSelectionRange(elem.value.length, elem.value.length);
-	        }
-	        // Scroll to the very right of the input
-	        elem.scrollLeft = elem.scrollWidth;
-        }
-	},
-	appendDialogHolder: function(){
-		
-		if( dialog.holder ){ return; }
-		
-		$("body").append('<div id="dialog-overlay"></div><div id="dialog-holder"><table id="dialog-center"><tr><td></td></tr></table></div>');
-		dialog.overlay = $("#dialog-overlay");
-		dialog.holder = $("#dialog-holder");
-		
-		dialog.bindDialogGlobalEvents();
-	},
-	removeDialogHolder: function(){
-		
-		dialog.unbindDialogGlobalEvents();
-		
-		dialog.overlay.remove();
-		dialog.holder.remove();
-		
-		dialog.overlay = undefined;
-		dialog.holder = undefined;
-		
-	},
-	close: function(){
-		var alert = $(".dialog-alert:not(.dialog-closing):first");
-		
-		alert.addClass("dialog-closing").bind(dialog.transitionEnd, function(e){
+		    	alert.remove();
+		    	
+		    	if ($(".dialog-alert").length === 0) {
+				    dialog.overlay.addClass("dialog-closing").bind(dialog.transitionEnd, function(e){
+					    
+					    // Make sure that the event was fired for the alert and not its content.
+						if( !$(e.target).is(this) ){ return; }
+						dialog.overlay.unbind(dialog.transitionEnd);
+					    
+				    	dialog.removeDialogHolder();
+					}).removeClass("dialog-visible");
+				}else{
+					dialog.showDialog();
+				}
+			}).removeClass("dialog-visible");	
+		},
+		bindDialogGlobalEvents: function(){
 			
-			// Make sure that the event was fired for the alert and not its content.
-			if( !$(e.target).is(this) ){ return; }
-			alert.unbind(dialog.transitionEnd);
+			dialog.holder.add(dialog.overlay).bind("click.dialog", function(e){
+				if( !$(e.target).closest(".dialog-alert").is(".dialog-alert") ){
+					$(".dialog-close:visible").trigger("click");
+				}
+			});
 			
-	    	alert.remove();
-	    	
-	    	if ($(".dialog-alert").length === 0) {
-			    dialog.overlay.addClass("dialog-closing").bind(dialog.transitionEnd, function(e){
-				    
-				    // Make sure that the event was fired for the alert and not its content.
-					if( !$(e.target).is(this) ){ return; }
-					dialog.overlay.unbind(dialog.transitionEnd);
-				    
-			    	dialog.removeDialogHolder();
-				}).removeClass("dialog-visible");
-			}else{
-				dialog.showDialog();
-			}
-		}).removeClass("dialog-visible");	
-	},
-	bindDialogGlobalEvents: function(){
-		
-		dialog.holder.add(dialog.overlay).bind("click.dialog", function(e){
-			if( !$(e.target).closest(".dialog-alert").is(".dialog-alert") ){
-				$(".dialog-close:visible").trigger("click");
-			}
-		});
-		
-		$(document).on("click.dialog", ".dialog-confirm, .dialog-cancel, .dialog-close", function(event) {
-			dialog.close();
-			return false;
-		});
-		
-		$(document).bind("keyup.dialog", function(e) {
-			if (e.keyCode == 27 && $(".dialog-alert").is(":visible")) { // Esc key
-				$(".dialog-close:visible").trigger("click");
-			}
-		});
-		
-		$(document).bind("keydown.dialog", function(event) {
-			
-			var alert = $(".dialog-alert:visible");
-			
-			if( alert.length === 0 ){
-				return;
-			}
-			
-			if (event.keyCode == 13) { // Enter key
-				alert.find(".dialog-confirm").trigger("click");
+			$(document).on("click.dialog", ".dialog-confirm, .dialog-cancel, .dialog-close", function(event) {
+				dialog.close();
 				return false;
-			}
-		});
+			});
+			
+			$(document).bind("keyup.dialog", function(e) {
+				if (e.keyCode == 27 && $(".dialog-alert").is(":visible")) { // Esc key
+					$(".dialog-close:visible").trigger("click");
+				}
+			});
+			
+			$(document).bind("keydown.dialog", function(event) {
+				
+				var alert = $(".dialog-alert:visible");
+				
+				if( alert.length === 0 ){
+					return;
+				}
+				
+				if (event.keyCode == 13) { // Enter key
+					alert.find(".dialog-confirm").trigger("click");
+					return false;
+				}
+			});
+		
+			$(window).bind("resize.dialog",function() {
+				dialog.overlay.height("100%");
+				dialog.overlay.height($(document).height());
+			});
+		},
+		unbindDialogGlobalEvents: function(){
+			dialog.overlay.off(".dialog");
+			dialog.holder.off(".dialog");
+			$(document).off(".dialog");
+			$(window).off(".dialog");
+		}
+	};
 	
-		$(window).bind("resize.dialog",function() {
-			dialog.overlay.height("100%");
-			dialog.overlay.height($(document).height());
-		});
-	},
-	unbindDialogGlobalEvents: function(){
-		dialog.overlay.off(".dialog");
-		dialog.holder.off(".dialog");
-		$(document).off(".dialog");
-		$(window).off(".dialog");
-	}
-};
+})(jQuery);
