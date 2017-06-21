@@ -2,8 +2,8 @@
 
 (function(){
 	
-	if( !$ && jQuery ){
-		$ = jQuery;
+	if( typeof $ === 'undefined' ){
+		var $ = jQuery;
 	}
 	
 	window.dialog = {
