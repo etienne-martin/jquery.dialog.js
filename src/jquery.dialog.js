@@ -3,7 +3,7 @@
 (function(){
 	
 	if( !$ && jQuery ){
-		$ = jQuery
+		$ = jQuery;
 	}
 	
 	window.dialog = {
@@ -318,4 +318,4 @@
 		}
 	};
 	
-});
+})();

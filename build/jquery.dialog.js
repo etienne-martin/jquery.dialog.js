@@ -29,7 +29,7 @@ SOFTWARE.
 (function() {
 
 	if (!$ && jQuery) {
-		$ = jQuery
+		$ = jQuery;
 	}
 
 	window.dialog = {
@@ -354,4 +354,4 @@ SOFTWARE.
 		}
 	};
 
-});
+})();
