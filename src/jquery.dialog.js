@@ -1,6 +1,10 @@
 "use strict";
 
-(function($){
+(function(){
+	
+	if( !$ && jQuery ){
+		$ = jQuery
+	}
 	
 	window.dialog = {
 		defaultParams: {
@@ -314,4 +318,4 @@
 		}
 	};
 	
-})(jQuery);
+});

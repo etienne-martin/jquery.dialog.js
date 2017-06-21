@@ -26,7 +26,11 @@ SOFTWARE.
 
 "use strict";
 
-(function($) {
+(function() {
+
+	if (!$ && jQuery) {
+		$ = jQuery
+	}
 
 	window.dialog = {
 		defaultParams: {
@@ -350,4 +354,4 @@ SOFTWARE.
 		}
 	};
 
-})(jQuery);
+});
