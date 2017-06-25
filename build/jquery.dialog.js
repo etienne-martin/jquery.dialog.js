@@ -262,6 +262,8 @@ SOFTWARE.
 			dialog.overlay = $("#dialog-overlay");
 			dialog.holder = $("#dialog-holder");
 
+			$("html").addClass("dialogIsVisible");
+
 			dialog.bindDialogGlobalEvents();
 		},
 		removeDialogHolder: function() {
@@ -273,6 +275,8 @@ SOFTWARE.
 
 			dialog.overlay = undefined;
 			dialog.holder = undefined;
+
+			$("html").removeClass("dialogIsVisible");
 
 		},
 		close: function() {

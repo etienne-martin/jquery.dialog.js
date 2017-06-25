@@ -229,6 +229,8 @@
 			$("body").append('<div id="dialog-overlay"></div><div id="dialog-holder"><table id="dialog-center"><tr><td></td></tr></table></div>');
 			dialog.overlay = $("#dialog-overlay");
 			dialog.holder = $("#dialog-holder");
+
+			$("html").addClass("dialogIsVisible");
 			
 			dialog.bindDialogGlobalEvents();
 		},
@@ -241,6 +243,8 @@
 			
 			dialog.overlay = undefined;
 			dialog.holder = undefined;
+
+			$("html").removeClass("dialogIsVisible");
 			
 		},
 		close: function(){
