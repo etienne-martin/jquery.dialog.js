@@ -192,6 +192,8 @@
 			    	dialog.focusElement(firstAlert.find("input")[0], true);
 				}).addClass("dialog-visible");
 			}, 1);
+
+			$("html").addClass("dialogIsVisible");
 			
 		},
 		injectDialog: function(){
@@ -230,9 +232,10 @@
 			dialog.overlay = $("#dialog-overlay");
 			dialog.holder = $("#dialog-holder");
 
-			$("html").addClass("dialogIsVisible");
-			
 			dialog.bindDialogGlobalEvents();
+
+			$("html").addClass("dialogHolderIsVisible");
+
 		},
 		removeDialogHolder: function(){
 			
@@ -244,7 +247,7 @@
 			dialog.overlay = undefined;
 			dialog.holder = undefined;
 
-			$("html").removeClass("dialogIsVisible");
+			$("html").removeClass("dialogHolderIsVisible");
 			
 		},
 		close: function(){
@@ -257,6 +260,8 @@
 				alert.unbind(dialog.transitionEnd);
 				
 		    	alert.remove();
+
+		    	$("html").removeClass("dialogIsVisible");
 		    	
 		    	if ($(".dialog-alert").length === 0) {
 				    dialog.overlay.addClass("dialog-closing").bind(dialog.transitionEnd, function(e){
@@ -271,6 +276,7 @@
 					dialog.showDialog();
 				}
 			}).removeClass("dialog-visible");	
+
 		},
 		bindDialogGlobalEvents: function(){
 			

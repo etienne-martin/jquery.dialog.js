@@ -221,6 +221,8 @@ SOFTWARE.
 				}).addClass("dialog-visible");
 			}, 1);
 
+			$("html").addClass("dialogIsVisible");
+
 		},
 		injectDialog: function() {
 			if ($(".dialog-alert:visible").length === 0) {
@@ -262,9 +264,10 @@ SOFTWARE.
 			dialog.overlay = $("#dialog-overlay");
 			dialog.holder = $("#dialog-holder");
 
-			$("html").addClass("dialogIsVisible");
-
 			dialog.bindDialogGlobalEvents();
+
+			$("html").addClass("dialogHolderIsVisible");
+
 		},
 		removeDialogHolder: function() {
 
@@ -276,7 +279,7 @@ SOFTWARE.
 			dialog.overlay = undefined;
 			dialog.holder = undefined;
 
-			$("html").removeClass("dialogIsVisible");
+			$("html").removeClass("dialogHolderIsVisible");
 
 		},
 		close: function() {
@@ -291,6 +294,8 @@ SOFTWARE.
 				alert.unbind(dialog.transitionEnd);
 
 				alert.remove();
+
+				$("html").removeClass("dialogIsVisible");
 
 				if ($(".dialog-alert").length === 0) {
 					dialog.overlay.addClass("dialog-closing").bind(dialog.transitionEnd, function(e) {
@@ -307,6 +312,7 @@ SOFTWARE.
 					dialog.showDialog();
 				}
 			}).removeClass("dialog-visible");
+
 		},
 		bindDialogGlobalEvents: function() {
 
